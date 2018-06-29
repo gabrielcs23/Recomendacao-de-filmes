@@ -34,7 +34,7 @@ feature_cols = [x for x in data.columns if (x != y_col)]
 x_data = data[feature_cols]
 y_data = data[y_col]
 
-train_feats, test_feats, train_labels, test_labels = tts(x_data, y_data, test_size=0.1)
+train_feats, test_feats, train_labels, test_labels = tts(x_data, y_data, test_size=0.1, random_state=42)
 
 
 # KNR = neighbors.KNeighborsRegressor(n_neighbors=5)
