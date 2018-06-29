@@ -92,9 +92,10 @@ for x in test_labels:
     i+=1
 i = 0
 result = []
+user = 170 # usuário para que a recomendação está sendo feita
 for index, row in test_feats.iterrows():
-    if predictions[i] >= 4:
-        result.append([row["movieID"], predictions[i]])
+    if row["userID"] == user:
+        result.append([row["movieID"], predictions[i], row["userID"]])
     i += 1
 result.sort(key=lambda x: x[1]) # ordena de forma crescente por rating
 result.reverse() # reverse a ordenação, fazendo com que os maiores rating fiquem no início
