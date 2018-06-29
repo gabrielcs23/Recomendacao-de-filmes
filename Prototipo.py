@@ -34,7 +34,7 @@ bos.columns = boston['feature_names']
 bos['Price'] = boston['target']
 print(bos)'''
 
-filepath = os.sep.join(['movie_data.csv'])
+filepath = os.sep.join(['movie_dataV18col.csv'])
 data = pd.read_csv(filepath, sep=';')
 data.replace('N/A', np.NaN)
 data = data.apply(lambda x: x.fillna(x.mean()),axis=0)
@@ -91,16 +91,23 @@ for x in test_labels:
         score += 1
     i+=1
 i = 0
-result = []
-user = 170 # usuário para que a recomendação está sendo feita
+top_filmes = []
+user = 170  # usuário para que a recomendação está sendo feita
 for index, row in test_feats.iterrows():
     if row["userID"] == user:
-        result.append([row["movieID"], predictions[i], row["userID"]])
+        top_filmes.append((int(row["movieID"]), predictions[i]))
     i += 1
-result.sort(key=lambda x: x[1]) # ordena de forma crescente por rating
-result.reverse() # reverse a ordenação, fazendo com que os maiores rating fiquem no início
+top_filmes.sort(key=lambda x: x[1]) # ordena de forma crescente por rating
+top_filmes.reverse() # reverse a ordenação, fazendo com que os maiores rating fiquem no início
+top_cinco = pd.DataFrame.from_records(top_filmes[:5], columns=["movieID", "prediction"])
 
-print("Result = ", result[:5])
+nomes = pd.read_csv(os.sep.join(['movies.csv']), sep=';')
+# print(nomes)
+
+resultado = pd.merge(top_cinco, nomes, on="movieID")[["movieID", "title"]]
+
+
+print("Result:\n", resultado, "\n")
 score = score/len(predictions)
 print("Average score:")
 print(score)
