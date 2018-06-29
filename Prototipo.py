@@ -6,6 +6,7 @@ from sklearn import linear_model
 from sklearn import kernel_ridge
 import pandas as pd
 import numpy as np
+import os
 import matplotlib.pyplot as plt
 import csv
 from sklearn import svm
@@ -33,7 +34,10 @@ bos.columns = boston['feature_names']
 bos['Price'] = boston['target']
 print(bos)'''
 
-data = pd.read_csv('movie_data.csv', sep=',')
+filepath = os.sep.join(['movie_data.csv'])
+data = pd.read_csv(filepath, sep=';')
+data.replace('N/A', np.NaN)
+data = data.apply(lambda x: x.fillna(x.mean()),axis=0)
 
 y_col = 'rating'
 
