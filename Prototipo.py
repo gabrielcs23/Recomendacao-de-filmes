@@ -75,8 +75,10 @@ KNR.fit(train_feats, train_labels)
 '''test_feats = np.array(boston['data'][504])
 test_feats = test_feats.reshape(1,-1)
 print(bos.ix[500:])'''
-
+# teste = [x for x in test_feats]
+# print(test_feats) # movieID do prdetiction cuja rating > 4
 predictions = KNR.predict(test_feats)
+print("Predictions:")
 print(predictions)
 print("\n")
 '''print(test_feats['movieID'][1])
@@ -88,8 +90,17 @@ for x in test_labels:
     if(i>-1 and x==round_of_rating(predictions[i])):
         score += 1
     i+=1
+i = 0
+result = []
+for index, row in test_feats.iterrows():
+    if (round_of_rating(predictions[i]) >= 4):
+        result.append(row["movieID"])
+    i += 1
 
+
+print("Result = ", result)
 score = score/len(predictions)
+print("Average score:")
 print(score)
 print("\n")
 
