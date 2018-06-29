@@ -8,6 +8,7 @@ from sklearn import svm
 from sklearn.preprocessing import StandardScaler
 from sklearn import tree
 from sklearn.ensemble import GradientBoostingRegressor
+from sklearn import neighbors
 
 def round_of_rating(number):
     """Round a number to the closest half integer.
@@ -37,27 +38,15 @@ y_data = data[y_col]
 train_feats, test_feats, train_labels, test_labels = tts(x_data, y_data, test_size=0.1, random_state=42)
 
 
-# KNR = neighbors.KNeighborsRegressor(n_neighbors=5)
-# KNR = linear_model.LassoCV(cv=20)
-KNR = linear_model.LinearRegression()
-# KNR = svm.SVR(kernel='poly', C=1e3, degree=2)
-# KNR = linear_model.SGDRegressor(loss='epsilon_insensitive',penalty='elasticnet',epsilon=0.1)
-# KNR = tree.DecisionTreeRegressor(max_depth=12)
-# KNR = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1,max_depth=2, loss='ls')
-# KNR = linear_model.Lars()
-# KNR = linear_model.BayesianRidge()
-# KNR = linear_model.LogisticRegression(class_weight='balanced', solver='saga')
-# KNR = linear_model.LassoLars()
-# KNR = linear_model.ARDRegression()
-
-'''train_feats = boston['data'][:500]
-train_labels = boston['target'][:500]'''
+# machine_learning = neighbors.KNeighborsRegressor(n_neighbors=5)
+# machine_learning = tree.DecisionTreeRegressor(max_depth=12)
+machine_learning = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=2, loss='ls')
 
 # train
-KNR.fit(train_feats, train_labels)
+machine_learning.fit(train_feats, train_labels)
 
 # prediction
-predictions = KNR.predict(test_feats)
+predictions = machine_learning.predict(test_feats)
 print("Predictions:")
 print(predictions)
 print("\n")
@@ -68,19 +57,19 @@ dataUser = dataUser.drop('userID', 1)
 dataUser = dataUser.drop('rating', 1)
 dataUser = dataUser.drop_duplicates()
 dataUser.insert(0, 'userID', 170)
-eai = KNR.predict(dataUser)
+previsao = machine_learning.predict(dataUser)
 i = 0
 top_filmes = list()
 for index, row in dataUser.iterrows():
-    top_filmes.append((int(row["movieID"]), eai[i]))
+    top_filmes.append((int(row["movieID"]), previsao[i]))
     i += 1
 top_filmes.sort(key=lambda x: x[1])  # ordena de forma crescente por rating
 top_filmes.reverse()  # reverse a ordenação, fazendo com que os maiores rating fiquem no início
-top_cinco = pd.DataFrame.from_records(top_filmes[:6], columns=["movieID", "prediction"])
+top_cinco = pd.DataFrame.from_records(top_filmes[:5], columns=["movieID", "prediction"])
 
 nomes = pd.read_csv(os.sep.join(['movies.csv']), sep=';')
 
-resultado = pd.merge(top_cinco, nomes, on="movieID")[["movieID", "title"]]
+resultado = pd.merge(top_cinco, nomes, on="movieID")[["movieID", "title", "prediction"]]
 
 
 print("Result:\n", resultado, "\n")
