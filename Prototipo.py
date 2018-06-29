@@ -93,12 +93,13 @@ for x in test_labels:
 i = 0
 result = []
 for index, row in test_feats.iterrows():
-    if (round_of_rating(predictions[i]) >= 4):
-        result.append(row["movieID"])
+    if predictions[i] >= 4:
+        result.append([row["movieID"], predictions[i]])
     i += 1
+result.sort(key=lambda x: x[1]) # ordena de forma crescente por rating
+result.reverse() # reverse a ordenação, fazendo com que os maiores rating fiquem no início
 
-
-print("Result = ", result)
+print("Result = ", result[:5])
 score = score/len(predictions)
 print("Average score:")
 print(score)
