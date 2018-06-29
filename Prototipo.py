@@ -51,6 +51,12 @@ print("Predictions:")
 print(predictions)
 print("\n")
 
+score = 0
+i = 0
+for x in test_labels:
+    if x == round_of_rating(predictions[i]):
+        score += 1
+    i += 1
 
 dataUser = data.copy()
 dataUser = dataUser.drop('userID', 1)
@@ -71,8 +77,11 @@ nomes = pd.read_csv(os.sep.join(['movies.csv']), sep=';')
 
 resultado = pd.merge(top_cinco, nomes, on="movieID")[["movieID", "title", "prediction"]]
 
-
 print("Result:\n", resultado, "\n")
+score = score/len(predictions)
+print("Average score:")
+print(score)
+print("\n")
 
 print("Explained variance score:")
 print(metrics.explained_variance_score(test_labels, predictions))
