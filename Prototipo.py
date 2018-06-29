@@ -1,11 +1,8 @@
 from sklearn import metrics
 from sklearn.model_selection import train_test_split as tts
-from sklearn import linear_model
 import pandas as pd
 import numpy as np
 import os
-from sklearn import svm
-from sklearn.preprocessing import StandardScaler
 from sklearn import tree
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn import neighbors
